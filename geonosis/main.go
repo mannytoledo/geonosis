@@ -8,7 +8,7 @@ import (
 )
 
 // Handler
-func hello(c *echo.Context) error {
+func index(c *echo.Context) error {
   return c.String(http.StatusOK, "Hello, World!\n")
 }
 
@@ -29,7 +29,7 @@ func main() {
   e.Use(mw.Recover())
 
   // Routes
-  e.Get("/", hello)
+  e.Get("/", index)
   e.Get("/v1/deployment", deploymentGet)
   e.Post("/v1/deployment", deploymentPost)
 
