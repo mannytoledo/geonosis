@@ -1,6 +1,8 @@
 package main
 
 import (
+  "net/http"
+
 	"github.com/labstack/echo"
 	mw "github.com/labstack/echo/middleware"
 	"html/template"
@@ -24,32 +26,38 @@ func (t *Template) Render(w io.Writer, name string, data interface{}) error {
 	return t.templates.ExecuteTemplate(w, name, data)
 }
 
-// Handler
-func index(c *echo.Context) error {
+func getDeployment(c *echo.Context) error {
 	return c.Render(http.StatusOK, "welcome", "Joe")
 	// return c.String(http.StatusOK, "Hello, World!\n")
 }
 
-func deploymentGet(c *echo.Context) error {
-	return c.String(http.StatusOK, "Deployment GET\n")
+func updateDeployment(c *echo.Context) error {
+  return c.String(http.StatusOK, "Deployment PATCH\n")
 }
 
-func deploymentPost(c *echo.Context) error {
-	return c.String(http.StatusOK, "Deployment POST\n")
+func deleteDeployment(c *echo.Context) error {
+  return c.String(http.StatusOK, "Deployment DELETE\n")
 }
 
 func main() {
 	// Echo instance
 	e := echo.New()
 
+  // Middleware
+  e.Use(mw.Logger())
+  e.Use(mw.Recover())
+
 	// Middleware
 	e.Use(mw.Logger())
 	e.Use(mw.Recover())
 	e.Index("public/index.html")
 
-	// Routes
-	e.Get("/v1/deployment", deploymentGet)
-	e.Post("/v1/deployment", deploymentPost)
+  // Deployment Routes
+  e.Post("/v1/deployments", createDeployment)
+  e.Get("/v1/deployments", getDeployment)
+  e.Get("/v1/deployments/:id", getDeployment)
+  e.Patch("/v1/deployments/:id", updateDeployment)
+  e.Delete("/v1/deployments/:id", deleteDeployment)
 
 	// Start server
 	e.Run(":1323")
