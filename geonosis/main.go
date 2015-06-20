@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"log"
-	"bytes"
 	"fmt"
 	"net/http"
 
@@ -33,8 +32,6 @@ func createDeployment(c *echo.Context) error {
 
 func getDeployment(c *echo.Context) error {
 
-	var retval bytes.Buffer
-
 	// Init the client
 	path := os.Getenv("DOCKER_CERT_PATH")
 	ca := fmt.Sprintf("%s/ca.pem", path)
@@ -43,30 +40,13 @@ func getDeployment(c *echo.Context) error {
 
 	docker, _ := dc.NewTLSClient(os.Getenv("DOCKER_HOST"), cert, key, ca)
 
-	// Get images
-	imgs, _ := docker.ListImages(dc.ListImagesOptions{All: false})
-	for _, img := range imgs {
-	    fmt.Println("ID: ", img.ID)
-	    fmt.Println("RepoTags: ", img.RepoTags)
-	    fmt.Println("Created: ", img.Created)
-	    fmt.Println("Size: ", img.Size)
-	    fmt.Println("VirtualSize: ", img.VirtualSize)
-	    fmt.Println("ParentId: ", img.ParentID)
-	}
-
 	// Get only running containers
 	containers, err := docker.ListContainers(dc.ListContainersOptions{All: false})
 	if err != nil {
 		log.Fatal(err)
 	}
-	for _, c := range containers {
-		retval.WriteString(c.ID)
-		retval.WriteString("|")
-		// retval.WriteString(c.Names)
-		// retval.WriteString("\n")
-	}
 
-	return c.String(http.StatusOK, retval.String())
+	return c.JSON(http.StatusOK, containers)
 }
 
 func updateDeployment(c *echo.Context) error {
