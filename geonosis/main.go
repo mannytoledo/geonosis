@@ -5,27 +5,31 @@ import (
 	"log"
 	"fmt"
 	"net/http"
-
 	"github.com/labstack/echo"
 	mw "github.com/labstack/echo/middleware"
 	"html/template"
 	"io"
-	"net/http"
+	dc "github.com/fsouza/go-dockerclient"
 )
 
-	dc "github.com/fsouza/go-dockerclient"
+type (
 	// Template provides HTML template rendering
 	Template struct {
 		templates *template.Template
 	}
 
+	// user struct {
+	// 	ID   string `json:"id"`
+	// 	Name string `json:"name"`
+	// }
 )
 
-// Handler
-func index(c *echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!\n")
+// Template provides HTML template rendering
+func (t *Template) Render(w io.Writer, name string, data interface{}) error {
+	return t.templates.ExecuteTemplate(w, name, data)
 }
 
+// Handler
 func createDeployment(c *echo.Context) error {
 	return c.String(http.StatusOK, "Deployment POST\n")
 }
@@ -62,7 +66,6 @@ func main() {
 	e := echo.New()
 
 	// Debug mode
-  e.Use(mw.Logger())
 	e.SetDebug(true)
 
 	// Middleware
