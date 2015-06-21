@@ -1,15 +1,15 @@
 package main
 
 import (
-	"os"
-	"log"
 	"fmt"
-	"net/http"
+	dc "github.com/fsouza/go-dockerclient"
 	"github.com/labstack/echo"
 	mw "github.com/labstack/echo/middleware"
 	"html/template"
 	"io"
-	dc "github.com/fsouza/go-dockerclient"
+	"log"
+	"net/http"
+	"os"
 )
 
 type (
