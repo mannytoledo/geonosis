@@ -96,6 +96,12 @@ func main() {
 	e.Patch("/v1/deployments/:id", updateDeployment)
 	e.Delete("/v1/deployments/:id", deleteDeployment)
 
+	// Serve Index
+	e.Index("public/index.html")
+
+	// Serve Static Assets
+	e.Static("/assets", "public/assets/")
+
 	// Start server
 	e.Run(":1323")
 }
