@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type (
@@ -62,6 +63,19 @@ func deleteDeployment(c *echo.Context) error {
 }
 
 func main() {
+
+	// Check for required variables
+	docker_host := os.Getenv("DOCKER_HOST")
+	docker_cert_path := os.Getenv("DOCKER_CERT_PATH")
+
+	if len(strings.TrimSpace(docker_host)) == 0 {
+	  panic("Please set DOCKER_HOST!")
+	}
+
+	if len(strings.TrimSpace(docker_cert_path)) == 0 {
+		panic("Please set DOCKER_CERT_PATH")
+	}
+
 	// Echo instance
 	e := echo.New()
 
