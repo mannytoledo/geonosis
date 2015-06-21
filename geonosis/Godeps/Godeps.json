@@ -12,6 +12,10 @@
 			"Rev": "2e53eb673c4450614e3bca6f345197f9527dce71"
 		},
 		{
+			"ImportPath": "github.com/fsouza/go-dockerclient",
+			"Rev": "ef07a30edc7949ee0f420b5640f2da843bce9cce"
+		},
+		{
 			"ImportPath": "github.com/labstack/echo",
 			"Comment": "v0.0.16-37-gdee0ddd",
 			"Rev": "dee0dddd6756f85ac62428a5f0a61bd0825bfeb2"
